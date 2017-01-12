@@ -94,17 +94,39 @@ def getCategoryTotalforDOW(customerID, category, day):
             continue
     return [total, count]
 
+def getTotalforDOW(customerID, day):
+    total = 0
+    count = 0
+    purchases = getPurchases(customerID)
+    for i in purchases:
+        dow = datetime.datetime.strptime(purchases[i][1], '%Y-%m-%d').date().weekday()
+        if dow == day:
+            total += purchases[i][2]
+            count += 1
+    return [total, count]
+
 # calculate suggested spending for a category for today
-def calculateSuggested(customerID, category, dow):
+# calculateSuggestedByCategory("58000d58360f81f104543d82", "food", 3)
+def calculateSuggestedByCategory(customerID, category, dow):
     total = getCategoryTotalforDOW(customerID, category, dow)
     avg = total[0] / total[1]
     currentBalance = getTotalBalance(customerID)
     if avg > currentBalance:
-        total = getTotalBalance(customerID)
-        fraction = total[0] / total
-        return fraction * total
+        totalBalance = getTotalBalance(customerID)
+        fraction = total[0] / totalBalance
+        return fraction * totalBalance
     else:
         return avg
 
-if __name__=="__main__":
-    print (calculateSuggested("58000d58360f81f104543d82", "food", 3))
+# calculate suggested spending overall for today
+# calculateSuggestedToday("58000d58360f81f104543d82", 3)
+def calculateSuggestedToday(customerID, dow):
+    total = getTotalforDOW(customerID, dow)
+    avg = total[0] / total[1]
+    currentBalance = getTotalBalance(customerID)
+    if avg > currentBalance:
+        totalBalance = getTotalBalance(customerID)
+        fraction = total[0] / totalBalance
+        return fraction * totalBalance
+    else:
+        return avg
