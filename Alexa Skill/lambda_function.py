@@ -2,6 +2,8 @@ from ask import alexa
 import urllib2
 import json
 
+import helpers
+
 def lambda_handler(request_obj, context={}):
     return alexa.route_request(request_obj)
 
@@ -18,12 +20,9 @@ def launch_request_handler(request):
 def session_ended_request_handler(request):
     return alexa.create_response(message="Bye!", end_session=True)
 
-@alexa.intent_handler("GetBreweriesNearby")
-def get_breweries_nearby_handler(request):
-    ############
-    # Here is where we will write our code to actually do the beer things!
-    # All the beer!
-    ############
+@alexa.intent_handler("GetCurrentBalance")
+def get_current_balance_handler(request):
+    test()
 
 @alexa.intent_handler("AMAZON.HelpIntent")
 def help_intent_handler(request):
