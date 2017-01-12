@@ -1,6 +1,22 @@
 import requests
 import json
 import datetime
+import logging
+import pymysql
+import sys
+#rds settings
+rds_host  = "allskill-db.cbzix5fu8xra.us-east-1.rds.amazonaws.com"
+name = "allskill"
+password = "noskill123"
+db_name = "allskill"
+
+try:
+    conn = pymysql.connect(rds_host, user=name, passwd=password, db=db_name, connect_timeout=5, port=3306)
+except Exception as e:
+    print("ERROR: Unexpected error: Could not connect to MySql instance. \nError: {error}".format(error=e))
+    sys.exit()
+
+print("SUCCESS: Connection to RDS mysql instance succeeded")
 
 apiKey = "638e3a40768577cc14440e93f78f7085"
 
