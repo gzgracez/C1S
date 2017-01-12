@@ -1,0 +1,33 @@
+{
+    "intents": [
+        {
+            "intent": "GetCurrentBalance",
+            "slots": 
+            [
+                {
+                    "name": "balance",
+                    "type": "AMAZON."
+                }
+            ]
+        },
+        {
+            "intent": "",
+            "slots": 
+            [
+                {
+                    "name": "",
+                    "type": ""
+                }
+            ]
+        },
+        {
+            "intent": "AMAZON.HelpIntent"
+        },
+        {
+            "intent": "AMAZON.StopIntent"
+        },
+        {
+            "intent": "AMAZON.CancelIntent"
+        }
+    ]
+}
