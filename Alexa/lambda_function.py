@@ -7,6 +7,8 @@ import sqlite3
 account = sqlite3.connect("account.db")
 cursor = account.cursor()
 
+import helpers
+
 def lambda_handler(request_obj, context={}):
     return alexa.route_request(request_obj)
 
