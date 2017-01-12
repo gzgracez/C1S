@@ -1,14 +1,14 @@
-{% extends "index.html" %}
-        {% block title %}All Accounts{% endblock %}
-    {% block body %}
-        <!--Import jQuery before materialize.js-->
-        {{ super }}
-		<table id="customers" class="striped">
-            <tr class="card-panel teal lighten-2"><td>Account</td><td>Balance</td></tr>
-    		{% for customer in customers %}
-    			<tr><td>{{ customer.type }}</td><td>{{ customer.balance }}</td></tr>
-    		{% endfor %}
-            <tr class="card-panel blue lighten-4">><td>Checking Total</td><td>{{ checkingTotal }}</td></tr>
-            <tr class="card-panel blue lighten-4">><td>Total</td><td>{{ totalBalance }}</td></tr>
-		</table>
-    {% endblock %}
+{% extends 'base.html' %}
+{% block title %}All Accounts{% endblock %}
+{% block content %}
+    {{ super }}
+    <table id="customers" class="striped">
+        <tr class="card-panel teal lighten-2"><td>Account</td><td>Balance</td></tr>
+        {% for customer in customers %}
+            <tr><td>{{ customer.type }}</td><td>{{ customer.balance }}</td></tr>
+        {% endfor %}
+        <tr class="card-panel blue lighten-4">><td>Checking Total</td><td>{{ checkingTotal }}</td></tr>
+        <tr class="card-panel blue lighten-4">><td>Total</td><td>{{ totalBalance }}</td></tr>
+    </table>
+{% endblock %}
+
