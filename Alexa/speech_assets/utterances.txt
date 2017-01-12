@@ -13,8 +13,6 @@ GetCreditBalance 	what is my credit card balance
 GetCreditBalance 	how much money can I spend with my credit card
 GetCreditBalance 	how much balance is remaining in my credit card
 
-Allocation	
-
 AMAZON.HelpIntent    what can I say
 AMAZON.HelpIntent    what can I ask
 AMAZON.StopIntent  no stop
