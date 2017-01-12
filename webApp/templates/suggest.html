@@ -4,11 +4,14 @@
     <div class="card-panel teal lighten-2" id="content">
         <h1>Make a Suggestion</h1>
     </div>
-		<div class="card-panel teal lighten-1">
-				<h5>Suggest an action:</h5>
+    <div class="card-panel teal lighten-1">
+        <h5>Suggest an action:</h5>
         <form action="" method="post">
-          <input type="text" placeholder="Suggestion" name="suggestion" value="{{ request.form.suggestion }}">
-          <input class="btn btn-default" type="submit" value="Go!">
+            <input type="text" placeholder="Suggestion" name="suggestion" value="{{ request.form.suggestion }}">
+            <input class="btn btn-default" type="submit" value="Go!">
         </form>
-		</div>
+    </div>
+    <script>
+        selection(2);
+    </script>
 {% endblock %}

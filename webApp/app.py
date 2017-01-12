@@ -51,6 +51,8 @@ def logout():
 
 @app.route("/accounts")
 def listAccounts():
+    if not session.get('logged_in'):
+        return redirect(url_for("login"))
     ab = []
     result = getResult()
     for key in result:
@@ -66,6 +68,8 @@ def listAccounts():
 
 @app.route("/suggestions")
 def suggestions():
+    if not session.get('logged_in'):
+        return redirect(url_for("login"))
     return render_template("suggest.html")
 
 if __name__ == "__main__":
