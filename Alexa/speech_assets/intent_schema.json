@@ -1,0 +1,33 @@
+{
+    "intents": [
+        {
+            "intent": "GetCurrentBalance"
+        },
+        {
+            "intent": "GetCreditBalance"
+        }, 
+        {
+            "intent": "GetCheckingBalance"
+        },
+        {
+            "intent": "Allocation",
+            "slots": 
+            [
+                {"name": "transportation", "type": ""},
+                {"name": "food", "type": ""},
+                {"name": "groceries", "type": ""},
+                {"name": "gas", "type": ""},
+                {"name": "taxes", "type": ""}
+            ]
+        }
+        {
+            "intent": "AMAZON.HelpIntent"
+        },
+        {
+            "intent": "AMAZON.StopIntent"
+        },
+        {
+            "intent": "AMAZON.CancelIntent"
+        }
+    ]
+}
