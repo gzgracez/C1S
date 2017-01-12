@@ -1,5 +1,6 @@
 import requests
 import json
+import datetime
 
 apiKey = "638e3a40768577cc14440e93f78f7085"
 
@@ -69,7 +70,30 @@ def getPurchases(customerID):
         else:
             return None
 
-# def 
+def getCategoryTotalforDOW(customerID, category, day):
+    total = 0
+    purchases = getPurchases(customerID)
+    for i in purchases:
+        merchantID = purchases[i][0]
+        merchantUrl = 'http://api.reimaginebanking.com/merchants/{}?key={}'.format(merchantID, apiKey)
+        merchantResponse = requests.get(merchantUrl)
+        if merchantResponse.status_code == 200:
+            merchantJSON = json.loads(merchantResponse.text)
+            categories = merchantJSON["category"]
+            cat = ""
+            if len(categories) < 0:
+                cat = "misc"
+            else:
+                cat = categories[0]
+            dow = datetime.datetime.strptime(purchases[i][1], '%Y-%m-%d').date().weekday()
+            if dow == day and cat == category:
+                total += purchases[i][2]
+        else:
+            continue
+    return total
 
-# if __name__=="__main__":
-#     print (getCreditCardBalance("58000d58360f81f104543d82"))
+# def calculateSuggested(dow):
+    
+
+if __name__=="__main__":
+    print (getCategoryTotalforDOW("58000d58360f81f104543d82", "food", 3))
