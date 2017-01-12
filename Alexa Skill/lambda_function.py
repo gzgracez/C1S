@@ -22,7 +22,7 @@ def session_ended_request_handler(request):
 
 @alexa.intent_handler("GetCurrentBalance")
 def get_current_balance_handler(request):
-    test()
+    return 0
 
 @alexa.intent_handler("AMAZON.HelpIntent")
 def help_intent_handler(request):
