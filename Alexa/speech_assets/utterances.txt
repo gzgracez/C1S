@@ -1,5 +1,20 @@
-// TODO: Add the utterances for the "GetBreweriesNearby" function
-// You can also add other statements to the functions below
+GetCurrentBalance	how much money do i have left
+GetCurrentBalance	what is my current balance
+GetCurrentBalance	how much money can I spend 
+GetCurrentBalance 	how much balance is remaining in my account
+
+GetCheckingBalance	how much money do I have left in my checking account
+GetCheckingBalance	what is my checking account balance
+GetCheckingBalance 	how much money can I spend from my checking account
+GetCheckingBalance 	how much balance is remaining in my checking account
+
+GetCreditBalance	how much money do I have left in my credit card
+GetCreditBalance 	what is my credit card balance
+GetCreditBalance 	how much money can I spend with my credit card
+GetCreditBalance 	how much balance is remaining in my credit card
+
+Allocation	
+
 AMAZON.HelpIntent    what can I say
 AMAZON.HelpIntent    what can I ask
 AMAZON.StopIntent  no stop
