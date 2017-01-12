@@ -30,6 +30,15 @@ def getCheckingBalance(customerID):
             checking += i["balance"]
     return checking
 
+# returns integer of current credit card balance
+def getCreditCardBalance(customerID):
+    accounts = getAccounts(customerID)
+    credit = 0
+    for i in accounts:
+        if i["type"].lower() == "credit card":
+            credit += i["balance"]
+    return credit
+
 # returns integer of current balance (checking - credit card)
 def getTotalBalance(customerID):
     accounts = getAccounts(customerID)
@@ -60,5 +69,7 @@ def getPurchases(customerID):
         else:
             return None
 
+# def 
+
 # if __name__=="__main__":
-#     print (getPurchases("58000d58360f81f104543d82"))
+#     print (getCreditCardBalance("58000d58360f81f104543d82"))
