@@ -45,11 +45,11 @@ def listAccounts():
     ab = []
     for key in result:
         account = result[key]
-        ab.append({"type": account[0], "balance": account[1]})
+        ab.append({"type": account[0], "balance": "${:,.2f}".format(account[1])})
     #li = [{"type": "hi", "balance": 20}, {"type": "bi", "balance": 200}]
     return render_template("listAccounts.html", customers=ab,
-        checkingTotal = getCheckingBalance(customerID),
-        totalBalance = getTotalBalance(customerID))
+        checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
+        totalBalance = "${:,.2f}".format(getTotalBalance(customerID)))
 
     # go through nessie APi
     # list accounts and balancee
