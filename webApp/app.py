@@ -1,8 +1,11 @@
 from flask import Flask
 from flask import render_template
+import requests
+import json
 app = Flask(__name__)
 
 API_KEY = "638e3a40768577cc14440e93f78f7085"
+BASE_NESSIE_URL = "http://api.reimaginebanking.com/"
 
 @app.route('/')
 def home():
@@ -10,6 +13,9 @@ def home():
 
 @app.route("/accounts")
 def listAccounts():
-    pass
-    # go through nessie APi
-    # list accounts and balancee
+    #TODO: replace bottom code with helper.py
+	accountsUrl = 'http://api.reimaginebanking.com/accounts?key={}'.format(API_KEY)
+	accountsResponse = requests.get(accountsUrl)
+	if accountsResponse.status_code == 200:
+		accounts = json.loads(accountsResponse.text)
+	return str(accounts)
