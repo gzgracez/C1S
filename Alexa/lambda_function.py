@@ -28,13 +28,13 @@ def session_ended_request_handler(request):
 @alexa.intent_handler("GetCurrentBalance")
 def get_current_balance_handler(request):
     #retrieve current balance of the credit card
-    credit_balance = 
+    credit_balance = getCreditBalance("58000d58360f81f104543d82")
 
     #retrieve current balance of the checking account
-    checking_balance = 
+    checking_balance = helpers.getCheckingBalance("58000d58360f81f104543d82")
 
     #net balance
-    net_balance = checking_balance - credit_balance
+    net_balance = helpers.getTotalBalance("58000d58360f81f104543d82")
 
     #set initial return message
     message = "Your current net balance is {}".format(str(net_balance))
@@ -48,7 +48,7 @@ def get_current_balance_handler(request):
 @alexa.intent_handler("GetCreditBalance")
 def get_credit_balance_handler(request):
     #retrieve current balance of the credit card
-    credit_balance = 
+    credit_balance = getCreditBalance("58000d58360f81f104543d82")
 
     #set initial return message
     message = "Credit card account current balance is {}".format(str(credit_balance))
@@ -62,7 +62,7 @@ def get_credit_balance_handler(request):
 @alexa.intent_handler("GetCheckingBalance")
 def get_checking_balance_handler(request):
     #retrieve current balance of the checking account
-    checking_balance = 
+    checking_balance = helpers.getCheckingBalance("58000d58360f81f104543d82")
 
     #set initial return message
     message = "Checking account current balance is {}".format(str(checking_balance))
