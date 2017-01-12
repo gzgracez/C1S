@@ -1,25 +1,25 @@
 {
     "intents": [
         {
-            "intent": "GetCurrentBalance",
-            "slots": 
-            [
-                {
-                    "name": "balance",
-                    "type": "AMAZON."
-                }
-            ]
+            "intent": "GetCurrentBalance"
         },
         {
-            "intent": "",
+            "intent": "GetCreditBalance"
+        }, 
+        {
+            "intent": "GetCheckingBalance"
+        },
+        {
+            "intent": "Allocation",
             "slots": 
             [
-                {
-                    "name": "",
-                    "type": ""
-                }
+                {"name": "transportation", "type": ""},
+                {"name": "food", "type": ""},
+                {"name": "groceries", "type": ""},
+                {"name": "gas", "type": ""},
+                {"name": "taxes", "type": ""}
             ]
-        },
+        }
         {
             "intent": "AMAZON.HelpIntent"
         },
