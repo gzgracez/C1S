@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}All Accounts{% endblock %}
 {% block content %}
-    {{ super }}
     <table id="customers" class="striped">
         <tr class="card-panel teal lighten-2"><td>Account</td><td>Balance</td></tr>
         {% for customer in customers %}
