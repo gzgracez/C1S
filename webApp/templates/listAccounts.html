@@ -18,9 +18,12 @@
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
 		<table id="customers" class="striped">
-		{% for customer in customers %}
-			<tr><td>{{ customer.type }}</td><td>{{ customer.balance }}</td></tr>
-		{% endfor %}
+            <tr class="card-panel teal lighten-2"><td>Account</td><td>Balance</td></tr>
+    		{% for customer in customers %}
+    			<tr><td>{{ customer.type }}</td><td>{{ customer.balance }}</td></tr>
+    		{% endfor %}
+            <tr class="card-panel blue lighten-4">><td>Checking Total</td><td>{{ checkingTotal }}</td></tr>
+            <tr class="card-panel blue lighten-4">><td>Total</td><td>{{ totalBalance }}</td></tr>
 		</table>
     {% endblock %}
 </body>
