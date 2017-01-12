@@ -4,7 +4,7 @@ import json
 import sys
 import os
 sys.path.append('../Alexa')
-from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance
+from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases
 # import ../AlexaSkill/helpers.py
 
 app = Flask(__name__)
@@ -21,6 +21,11 @@ def getResult():
         return redirect(url_for("login"))
     result = getAccountAndBalance(customerID)
     return result
+
+def checkAuth():
+    if not session.get('logged_in'):
+        return False
+    return True
 
 @app.route('/')
 def home():
@@ -51,7 +56,7 @@ def logout():
 
 @app.route("/accounts")
 def listAccounts():
-    if not session.get('logged_in'):
+    if checkAuth() == False:
         return redirect(url_for("login"))
     ab = []
     result = getResult()
@@ -68,9 +73,20 @@ def listAccounts():
 
 @app.route("/suggestions")
 def suggestions():
-    if not session.get('logged_in'):
+    if checkAuth() == False:
         return redirect(url_for("login"))
     return render_template("suggest.html")
+
+@app.route("/purchases")
+def purchases():
+    if checkAuth() == False:
+        return redirect(url_for("login"))
+    d = []
+    result = getPurchases(customerID)
+    for key in result:
+        purchase = result[key]
+        d.append({"merchantID": purchase[0], "purchaseDate": purchase[1], "amount": "${:,.2f}".format(purchase[2])})
+    return render_template("purchases.html", purchases=d)
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
