@@ -3,6 +3,7 @@ import json
 
 apiKey = "638e3a40768577cc14440e93f78f7085"
 
+# returns array of accounts
 def getAccounts(customerID):
 	accountsUrl = 'http://api.reimaginebanking.com/customers/{}/accounts?key={}'.format(customerID, apiKey)
 	accountsResponse = requests.get(accountsUrl)
@@ -12,6 +13,7 @@ def getAccounts(customerID):
 	else:
 		return None
 
+# [{accountID, [account name, balance]}]
 def getAccountAndBalance(customerID):
 	accounts = getAccounts(customerID)
 	ab = {}
@@ -19,6 +21,7 @@ def getAccountAndBalance(customerID):
 		ab[i["_id"]] = [i["nickname"], i["balance"]]
 	return ab
 
+# returns integer of current balance (checking - credit card)
 def getTotalBalance(customerID):
 	accounts = getAccounts(customerID)
 	current = 0
@@ -45,3 +48,4 @@ def getPurchases(customerID):
 
 if __name__=="__main__":
     # print getPurchases("58000d58360f81f104543d82")
+    print json.dumps(getAccountAndBalance("58000d58360f81f104543d82"), indent = 2)
