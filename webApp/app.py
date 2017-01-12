@@ -38,7 +38,7 @@ def logout():
 
 @app.route("/accounts")
 def listAccounts():
-    if not session["logged_in"]:
+    if not session.get('logged_in'):
         flash("Not logged in!")
         return redirect(url_for("login"))
     result = getAccountAndBalance(customerID)
