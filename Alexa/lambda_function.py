@@ -57,6 +57,45 @@ def get_checking_balance_handler(request):
         message = message + "Be careful of your spending!"
     return alexa.create_response(message=message, end_session=True)
 
+
+@alexa.intent_handler("Suggestions")
+def give_suggestions(request):
+    #retrieve what category the user wanted
+    category = str(request.get_slot_value("category")).lower()
+    #start with empty string
+    message = ""
+    #if the user didn't provide category, tell it to try again
+    if category == "":
+        message = message + "Please try again and specify the category you are looking for."
+        boolEndValue = False
+    #when the user did provide category, follow through
+    else:
+        if category == "groceries":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", category, 3)
+            message = message + "For {}, you should spend ${}.".format(category, value)
+            boolEndValue = True
+        elif category == "food":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", category, 3)
+            message = message + "For {}, you should spend ${}.".format(category, value)
+            boolEndValue = True
+        elif category == "gas":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", category, 3)
+            message = message + "For {}, you should spend ${}.".format(category, value)
+            boolEndValue = True
+        elif category == "shopping":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", category, 3)
+            message = message + "For {}, you should spend ${}.".format(category, value)
+            boolEndValue = True
+        elif category == "clothes":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", category, 3)
+            message = message + "For {}, you should spend ${}.".format(category, value)
+            boolEndValue = True
+        else:
+            message = message + "Sorry, we don't have information about that. Try a different category."
+            boolEndValue = False
+    return alexa.create_response(message=message, end_session=boolEndValue)
+
+
 @alexa.intent_handler("AMAZON.HelpIntent")
 def help_intent_handler(request):
     return alexa.create_response(message="This skill gives information about your bank account.", end_session=False)
