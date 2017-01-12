@@ -58,8 +58,8 @@ def get_checking_balance_handler(request):
     return alexa.create_response(message=message, end_session=True)
 
 
-@alexa.intent_handler("Suggestions")
-def give_suggestions(request):
+@alexa.intent_handler("GiveSuggestions")
+def give_suggestions_handler(request):
     #retrieve what category the user wanted
     category = str(request.get_slot_value("category")).lower()
     #start with empty string
@@ -93,6 +93,7 @@ def give_suggestions(request):
         else:
             message = message + "Sorry, we don't have information about that. Try a different category."
             boolEndValue = False
+            
     return alexa.create_response(message=message, end_session=boolEndValue)
 
 

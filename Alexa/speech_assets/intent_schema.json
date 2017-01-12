@@ -10,8 +10,8 @@
             "intent": "GetCheckingBalance"
         },
         {
-            "intent": "Suggestions",
-            "slots" :[ {"name": "category", "type": "AMAZON.LITERAL"}]
+            "intent": "GiveSuggestions",
+            "slots" :[ {"name": "category", "type": "CATEGORIES"}]
         },
         {
             "intent": "AMAZON.HelpIntent"
