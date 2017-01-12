@@ -18,4 +18,7 @@ def listAccounts():
 	accountsResponse = requests.get(accountsUrl)
 	if accountsResponse.status_code == 200:
 		accounts = json.loads(accountsResponse.text)
-	return str(accounts)
+    #li = [{"type": "hi", "balance": 20}, {"type": "bi", "balance": 200}]
+    return render_template("listAccounts.html", customers=li)
+    # go through nessie APi
+    # list accounts and balancee
