@@ -12,6 +12,13 @@ def getAccounts(customerID):
 	else:
 		return None
 
+def getAccountAndBalance(customerID):
+	accounts = getAccounts(customerID)
+	ab = {}
+	for i in accounts:
+		ab[i["_id"]] = [i["nickname"], i["balance"]]
+	return ab
+
 def getTotalBalance(customerID):
 	accounts = getAccounts(customerID)
 	current = 0
@@ -30,7 +37,11 @@ def getPurchases(customerID):
 		accountID = i["_id"]
 		purchasesUrl = 'http://api.reimaginebanking.com/accounts/{}/purchases?key={}'.format(accountID, apiKey)
 		purchasesResponse = requests.get(purchasesUrl)
-		print json.dumps(i)
+		if purchasesResponse.status_code == 200:
+			purchases = json.loads(purchasesResponse.text)
+			print purchases
+		else:
+			return None
 
 if __name__=="__main__":
-    print getPurchases("58000d58360f81f104543d82")
+    # print getPurchases("58000d58360f81f104543d82")
