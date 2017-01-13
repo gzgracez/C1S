@@ -3,8 +3,9 @@ import requests
 import json
 import sys
 import os
+import datetime
 sys.path.append('../Alexa')
-from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases
+from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday
 # import ../AlexaSkill/helpers.py
 
 app = Flask(__name__)
@@ -37,8 +38,10 @@ def home():
         for key in result:
             account = result[key]
             ab.append({"type": account[0], "balance": "${:,.2f}".format(account[1])})
+        yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
         return render_template("home.html", checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
-        totalBalance = "${:,.2f}".format(getTotalBalance(customerID)))
+        totalBalance = "${:,.2f}".format(getTotalBalance(customerID)),
+        targetToday = "${:,.2f}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())))
 
 @app.route('/login', methods=["GET", 'POST'])
 def login():
