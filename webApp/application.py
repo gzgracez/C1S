@@ -4,13 +4,12 @@ import json
 import sys
 import os
 import datetime
-sys.path.append('../Alexa')
 from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday, getAllocations, addAllocation, updateAllocations, calculateSuggestedByCategory
 # import ../AlexaSkill/helpers.py
 
-app = Flask(__name__)
-app.config['DEBUG'] = True
-app.secret_key = os.urandom(12)
+application = Flask(__name__)
+application.config['DEBUG'] = True
+application.secret_key = os.urandom(12)
 
 API_KEY = "638e3a40768577cc14440e93f78f7085"
 BASE_NESSIE_URL = "http://api.reimaginebanking.com/"
@@ -33,7 +32,7 @@ def getMerchantName(merchantID):
     merchantName = json.loads(requests.get(merchantURL).text)["name"]
     return merchantName
 
-@app.route('/', methods=["GET", "POST"])
+@application.route('/', methods=["GET", "POST"])
 def home():
     msg = ""
     if not session.get('logged_in'):
@@ -62,7 +61,7 @@ def home():
     targetToday = "${:,.2f}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())),
     suggestion = msg)
 
-@app.route('/login', methods=["GET", 'POST'])
+@application.route('/login', methods=["GET", 'POST'])
 def login():
     if request.method == "POST" and request.form['password'] == 'password' and request.form['username'] == 'admin':
         session['logged_in'] = True
@@ -71,12 +70,12 @@ def login():
         flash("Try again")
         return render_template("login.html")
 
-@app.route("/logout")
+@application.route("/logout")
 def logout():
     session["logged_in"] = False
     return redirect("/")
 
-@app.route("/accounts")
+@application.route("/accounts")
 def listAccounts():
     if checkAuth() == False:
         return redirect(url_for("login"))
@@ -90,7 +89,7 @@ def listAccounts():
         checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
         totalBalance = "${:,.2f}".format(getTotalBalance(customerID)))
 
-@app.route("/purchases")
+@application.route("/purchases")
 def purchases():
     if checkAuth() == False:
         return redirect(url_for("login"))
@@ -102,7 +101,7 @@ def purchases():
     d = sorted(d, key=lambda k: datetime.datetime.strptime(k['purchaseDate'],"%Y-%m-%d"), reverse=True)
     return render_template("purchases.html", purchases=d)
 
-@app.route("/allocations", methods=["GET", "POST"])
+@application.route("/allocations", methods=["GET", "POST"])
 def allocations():
     if request.method == "POST":
         addAllocation(customerID, request.form["category"], request.form["amount"], request.form["date"])
@@ -119,4 +118,4 @@ def allocations():
     return render_template("allocations.html", allocations=l, total="${:,.2f}".format(total))
 
 if __name__ == "__main__":
-    app.run(debug=True,host='0.0.0.0')
+    application.run(debug=True,host='0.0.0.0')
