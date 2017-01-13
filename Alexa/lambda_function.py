@@ -70,24 +70,24 @@ def give_suggestions_handler(request):
         boolEndValue = False
     #when the user did provide category, follow through
     else:
-        if category == "shopping":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "store", 3)
+        if category == "groceries":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 1)
             message = message + "For {}, you should spend ${}.".format(category, value)
             boolEndValue = True
         elif category == "food":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", category, 3)
-            message = message + "For {}, you should spend ${}.".format(category, value)
-            boolEndValue = True
-        elif category == "gas":
             value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "food", 3)
             message = message + "For {}, you should spend ${}.".format(category, value)
             boolEndValue = True
+        elif category == "gas":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", 2)
+            message = message + "For {}, you should spend ${}.".format(category, value)
+            boolEndValue = True
         elif category == "shopping":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", category, 3)
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "shopping", 6)
             message = message + "For {}, you should spend ${}.".format(category, value)
             boolEndValue = True
         elif category == "clothes":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", category, 3)
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "clothing", 6)
             message = message + "For {}, you should spend ${}.".format(category, value)
             boolEndValue = True
         else:
