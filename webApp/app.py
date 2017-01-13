@@ -5,7 +5,7 @@ import sys
 import os
 import datetime
 sys.path.append('../Alexa')
-from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday, getAllocations, addAllocation, updateAllocations
+from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday, getAllocations, addAllocation, updateAllocations, calculateSuggestedByCategory
 # import ../AlexaSkill/helpers.py
 
 app = Flask(__name__)
@@ -33,20 +33,34 @@ def getMerchantName(merchantID):
     merchantName = json.loads(requests.get(merchantURL).text)["name"]
     return merchantName
 
-@app.route('/')
+@app.route('/', methods=["GET", "POST"])
 def home():
+    msg = ""
     if not session.get('logged_in'):
         return redirect(url_for("login"))
-    else:
-        ab = []
-        result = getResult()
-        for key in result:
-            account = result[key]
-            ab.append({"type": account[0], "balance": "${:,.2f}".format(account[1])})
-        yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
-        return render_template("index.html")#, checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
-        #totalBalance = "${:,.2f}".format(getTotalBalance(customerID)),
-        #targetToday = "${:,.2s}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())))
+    elif request.method == "POST":
+        if request.form['category'] == 'groceries':
+            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 1)
+            msg = "For {}, you should spend ${}.".format('groceries', value)
+        elif request.form['category'] == 'food':
+            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "food", 3)
+            msg = "For {}, you should spend ${}.".format('food', value)
+        elif request.form['category'] == 'gas':
+            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", 2)
+            msg = "For {}, you should spend ${}.".format('gas', value)
+        elif request.form['category'] == 'shopping':
+            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "shopping", 6)
+            msg = "For {}, you should spend ${}.".format('shopping', value)
+        elif request.form['category'] == 'clothing':
+            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "clothing", 5)
+            msg = "For {}, you should spend ${}.".format('clothing', value)
+        else:
+            msg = "Sorry, nothing was available for " + request.form['category'] + ". Try again."
+
+    return render_template("index.html", checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
+    totalBalance = "${:,.2f}".format(getTotalBalance(customerID)),
+    targetToday = "${:,.2f}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())),
+    suggestion = msg)
 
 @app.route('/login', methods=["GET", 'POST'])
 def login():
