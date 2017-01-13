@@ -62,33 +62,52 @@ def get_checking_balance_handler(request):
 def give_suggestions_handler(request):
     #retrieve what category the user wanted
     category = str(request.get_slot_value("category")).lower()
+    #retrieve what day of the week it is
+    day = str(request.get_slot_value("day")).lower()
     #start with empty string
     message = ""
+    #dayInteger
+    dayInteger = 0
     #if the user didn't provide category, tell it to try again
-    if category == "":
-        message = message + "Please try again and specify the category you are looking for."
+    if not category or day:
+        message = message + "Please try again and specify the category or day."
         boolEndValue = False
     #when the user did provide category, follow through
     else:
-        if category == "groceries":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 1)
-            message = message + "For {}, you should spend ${}.".format(category, value)
+        if day == "monday":
+            dayInteger = 0
+        elif day == "tuesday":
+            dayInteger = 1
+        elif day == "wednesday":
+            dayInteger = 2
+        elif day == "thursday":
+            dayInteger = 3
+        elif day == "friday":
+            dayInteger = 4
+        elif day == "satuday":
+            dayInteger = 5
+        elif day == "sunday":
+            dayInteger = 6
+
+        if category == "groceries" or category=="grocery":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", dayInteger)
+            message = message + "For {} on {}, you should spend ${}.".format(category, day, value)
             boolEndValue = True
-        elif category == "food":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "food", 3)
-            message = message + "For {}, you should spend ${}.".format(category, value)
+        elif category == "food" or category == "foods":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "food", dayInteger)
+            message = message + "For {}on {}, you should spend ${}.".format(category, day, value)
             boolEndValue = True
         elif category == "gas":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", 2)
-            message = message + "For {}, you should spend ${}.".format(category, value)
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", dayInteger)
+            message = message + "For {}on {}, you should spend ${}.".format(category, day, value)
             boolEndValue = True
         elif category == "shopping":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "shopping", 6)
-            message = message + "For {}, you should spend ${}.".format(category, value)
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "shopping", dayInteger)
+            message = message + "For {}on {}, you should spend ${}.".format(category, day, value)
             boolEndValue = True
-        elif category == "clothes":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "clothing", 6)
-            message = message + "For {}, you should spend ${}.".format(category, value)
+        elif category == "clothes" or category == "clothings":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "clothing", dayInteger)
+            message = message + "For {}on {}, you should spend ${}.".format(category, day, value)
             boolEndValue = True
         else:
             message = message + "Sorry, we don't have information about that. Try a different category."
