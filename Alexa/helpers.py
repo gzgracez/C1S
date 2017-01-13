@@ -176,7 +176,7 @@ def addAllocation(customerID, category, amount, day):
 # def getAllocations():
 
 
-if __name__=="__main__":
+# if __name__=="__main__":
     # print json.dumps(getPurchases("58000d58360f81f104543d82"))
     # print getCategoryTotalforDOW("58000d58360f81f104543d82", "grocery", 1)
     # print getTotalBalance("58000d58360f81f104543d82")
