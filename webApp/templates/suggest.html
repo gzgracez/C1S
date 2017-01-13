@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
-{% block title %}Suggestions{% endblock %}
+{% block title %}Suggested Spending{% endblock %}
 {% block content %}
-    <div class="card-panel teal lighten-2" id="content">
-        <h1>Make a Suggestion</h1>
+    <div class="card-panel blue accent-3" id="content">
+        <h1>Need some advice?</h1>
     </div>
-    <div class="card-panel teal lighten-1">
-        <h5>Suggest an action:</h5>
+    <div class="card-panel blue lighten-3">
+        <h5>Ask All Skill!</h5>
         <form action="" method="post">
-            <input type="text" placeholder="Suggestion" name="suggestion" value="{{ request.form.suggestion }}">
+            <p>How much should I spend on: <input type="text" class="text-darken-2" placeholder="category" name="category" value="{{ request.form.suggestion }}">
             <input class="btn btn-default" type="submit" value="Go!">
         </form>
     </div>

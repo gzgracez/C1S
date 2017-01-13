@@ -28,6 +28,11 @@ def checkAuth():
         return False
     return True
 
+def getMerchantName(merchantID):
+    merchantURL = "http://api.reimaginebanking.com/merchants/%s?key=%s" %(merchantID, API_KEY)
+    merchantName = json.loads(requests.get(merchantURL).text)["name"]
+    return merchantName
+
 @app.route('/')
 def home():
     if not session.get('logged_in'):
@@ -88,7 +93,8 @@ def purchases():
     result = getPurchases(customerID)
     for key in result:
         purchase = result[key]
-        d.append({"merchantID": purchase[3], "purchaseDate": purchase[1], "amount": "${:,.2f}".format(purchase[2])})
+        name = getMerchantName(purchase[0])
+        d.append({"merchantID": name, "purchaseDate": purchase[1], "amount": "${:,.2f}".format(purchase[2])})
     return render_template("purchases.html", purchases=d)
 
 if __name__ == "__main__":
