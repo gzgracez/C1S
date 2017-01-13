@@ -210,3 +210,4 @@ if __name__=="__main__":
     # print updateAllocations("58000d58360f81f104543d82")
     print getAllocationsDate("58000d58360f81f104543d82","2017-01-12")
     # print json.dumps(getPurchases("58000d58360f81f104543d82"))
+

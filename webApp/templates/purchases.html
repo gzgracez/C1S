@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}Suggestions{% endblock %}
 {% block content %}
-    <div class="card-panel teal lighten-2" id="content">
+    <div class="card-panel blue accent-3" id="content">
         <h1>Purchase History</h1>
     </div>
     <table id="purchases" class="striped">
-        <tr class="card-panel teal lighten-2"><td>Merchant</td><td>Date</td><td>Amount</td></tr>
+        <tr class="card-panel blue lighten-3"><td>Merchant</td><td>Date</td><td>Amount</td></tr>
         {% for purchase in purchases %}
             <tr><td>{{ purchase.merchantID }}</td><td>{{ purchase.purchaseDate }}</td><td>{{ purchase.amount }}</td></tr>
         {% endfor %}
