@@ -102,10 +102,14 @@ def getCategoryTotalforDOW(customerID, category, day):
                 cat = "misc"
             else:
                 cat = categories[0]
+            # print cat
+            # print purchases[i][2]
             dow = datetime.datetime.strptime(purchases[i][1], '%Y-%m-%d').date().weekday()
-            if dow == day and cat == category:
+            if dow == day and cat.lower() == category.lower():
                 total += purchases[i][2]
                 count += 1
+                print cat
+                print purchases[i][2]
         else:
             continue
     return [total, count]
@@ -146,3 +150,8 @@ def calculateSuggestedToday(customerID, dow):
         return fraction * totalBalance
     else:
         return avg
+
+# if __name__=="__main__":
+    # print getCategoryTotalforDOW("58000d58360f81f104543d82", "food", 3)
+    # print getTotalBalance("58000d58360f81f104543d82")
+    # print calculateSuggestedByCategory("58000d58360f81f104543d82", "food", 3)
