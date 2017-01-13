@@ -39,19 +39,24 @@ def home():
         return redirect(url_for("login"))
     elif request.method == "POST":
         if request.form['category'] == 'groceries':
-            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 1)
+            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", datetime.datetime.now().weekday())
+            if value == None: value = 0
             msg = "For {}, you should spend ${}.".format('groceries', value)
         elif request.form['category'] == 'food':
-            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "food", 3)
+            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "food", datetime.datetime.now().weekday())
+            if value == None: value = 0
             msg = "For {}, you should spend ${}.".format('food', value)
         elif request.form['category'] == 'gas':
-            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", 2)
+            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", datetime.datetime.now().weekday())
+            if value == None: value = 0
             msg = "For {}, you should spend ${}.".format('gas', value)
         elif request.form['category'] == 'shopping':
-            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "shopping", 6)
+            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "shopping", datetime.datetime.now().weekday())
+            if value == None: value = 0
             msg = "For {}, you should spend ${}.".format('shopping', value)
         elif request.form['category'] == 'clothing':
-            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "clothing", 5)
+            value = calculateSuggestedByCategory("58000d58360f81f104543d82", "clothing", datetime.datetime.now().weekday())
+            if value == None: value = 0
             msg = "For {}, you should spend ${}.".format('clothing', value)
         else:
             msg = "Sorry, nothing was available for " + request.form['category'] + ". Try again."
