@@ -5,7 +5,7 @@ import sys
 import os
 import datetime
 sys.path.append('../Alexa')
-from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday
+from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday, getAllocations
 # import ../AlexaSkill/helpers.py
 
 app = Flask(__name__)
@@ -44,7 +44,7 @@ def home():
             account = result[key]
             ab.append({"type": account[0], "balance": "${:,.2f}".format(account[1])})
         yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
-        return render_template("home.html", checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
+        return render_template("index.html", checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
         totalBalance = "${:,.2f}".format(getTotalBalance(customerID)),
         targetToday = "${:,.2f}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())))
 
@@ -76,15 +76,6 @@ def listAccounts():
         checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
         totalBalance = "${:,.2f}".format(getTotalBalance(customerID)))
 
-    # go through nessie APi
-    # list accounts and balancee
-
-@app.route("/suggestions")
-def suggestions():
-    if checkAuth() == False:
-        return redirect(url_for("login"))
-    return render_template("suggest.html")
-
 @app.route("/purchases")
 def purchases():
     if checkAuth() == False:
@@ -93,9 +84,21 @@ def purchases():
     result = getPurchases(customerID)
     for key in result:
         purchase = result[key]
-        name = getMerchantName(purchase[0])
-        d.append({"merchantID": name, "purchaseDate": purchase[1], "amount": "${:,.2f}".format(purchase[2])})
+        d.append({"merchantID": purchase[3], "purchaseDate": purchase[1], "amount": "${:,.2f}".format(purchase[2])})
+        d = sorted(d, key=lambda k: datetime.datetime.strptime(k['purchaseDate'],"%Y-%m-%d"), reverse=True)
     return render_template("purchases.html", purchases=d)
+
+@app.route("/allocations")
+def allocations():
+    data = getAllocations(customerID)
+    print(str(data))
+    l = []
+    total = 0
+    for dat in data:
+        l.append({"cat": dat[0], "amount": str(dat[1])})
+        total += dat[1]
+    print(l)
+    return render_template("allocations.html", allocations=l, total=total)
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')

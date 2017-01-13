@@ -2,7 +2,7 @@
 {% block title %}All Accounts{% endblock %}
 {% block content %}
     <table id="customers" class="striped">
-        <tr class="card-panel teal lighten-2"><td>Account</td><td>Balance</td></tr>
+        <tr class="blue accent-3"><td>Account</td><td>Balance</td></tr>
         {% for customer in customers %}
             <tr><td>{{ customer.type }}</td><td>{{ customer.balance }}</td></tr>
         {% endfor %}
@@ -13,4 +13,3 @@
         selection(1);
     </script>
 {% endblock %}
-

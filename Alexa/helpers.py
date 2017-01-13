@@ -17,20 +17,6 @@ except Exception as e:
 
 print("SUCCESS: Connection to RDS mysql instance succeeded")
 
-def handler():
-    
-    item_count = 0
-
-    with conn.cursor() as cur:
-        cur.execute('INSERT into allocations (category, amount, customerID, day) values("food", 16, "58000d58360f81f104543d82", "2017-1-11");')
-        conn.commit()
-        cur.execute("select * from allocations")
-        for row in cur:
-            item_count += 1
-            print(row)
-            #print(row)
-    return "Added %d items from RDS MySQL table" %(item_count)
-
 apiKey = "638e3a40768577cc14440e93f78f7085"
 
 # returns array of accounts
@@ -69,6 +55,22 @@ def getCreditCardBalance(customerID):
             credit += i["balance"]
     return credit
 
+# returns integer of actual balance (checking - credit card - allocations)
+def getActualBalance(customerID):
+    accounts = getAccounts(customerID)
+    current = 0
+    for i in accounts:
+        if i["type"].lower() == "credit card":
+            current -= i["balance"]
+        elif i["type"].lower() == "checking":
+            current += i["balance"]
+        else:
+            continue
+    allocations = getAllocations(customerID)
+    for i in allocations:
+        current -= i[1]
+    return current
+
 # returns integer of current balance (checking - credit card)
 def getTotalBalance(customerID):
     accounts = getAccounts(customerID)
@@ -94,7 +96,12 @@ def getPurchases(customerID):
             purchasesJSON = json.loads(purchasesResponse.text)
             for i in purchasesJSON:
                 if i["medium"].lower() == "balance":
-                    purchases[i["_id"]] = [i["merchant_id"], i["purchase_date"], i["amount"]]
+                    merchantID = i["merchant_id"]
+                    merchantUrl = 'http://api.reimaginebanking.com/merchants/{}?key={}'.format(merchantID, apiKey)
+                    if purchasesResponse.status_code == 200:
+                        merchantsResponse = requests.get(merchantUrl)
+                        merchantJSON = json.loads(merchantsResponse.text)
+                        purchases[i["_id"]] = [merchantID, i["purchase_date"], i["amount"], merchantJSON["name"]]
             return purchases
         else:
             return None
@@ -168,11 +175,38 @@ def addAllocation(customerID, category, amount, day):
         conn.commit()
     return True
 
-# def getAllocations():
-    
+def getAllocations(customerID):
+    with conn.cursor() as cur:
+        cur.execute("select * from allocations where customerID='{}'".format(customerID))
+        allocations = []
+        for row in cur:
+            allocations.append(row)
+        return allocations
 
-if __name__=="__main__":
-    print handler()
-    # print getCategoryTotalforDOW("58000d58360f81f104543d82", "grocery", 1)
-    # print getTotalBalance("58000d58360f81f104543d82")
-    # print calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 1)
+def getAllocationsDate(customerID, date):
+    with conn.cursor() as cur:
+        cur.execute("select * from allocations where customerID='{}' and day='{}'".format(customerID, date))
+        allocations = []
+        for row in cur:
+            allocations.append(row)
+        return allocations
+
+def deleteAllocations(dateString):
+    with conn.cursor() as cur:
+        cur.execute("delete from allocations where day < '{}';".format(dateString))
+        conn.commit()
+        return True
+
+def updateAllocations(customerID):
+    with conn.cursor() as cur:
+        today = datetime.date.today().strftime('%Y-%m-%d')
+        return deleteAllocations(today)
+
+# if __name__=="__main__":
+    # print addAllocation("58000d58360f81f104543d82", "food", 20, '2017-1-12')
+    # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-10')
+    # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-11')
+    # print updateAllocations("58000d58360f81f104543d82")
+    # print getAllocationsDate("58000d58360f81f104543d82","2017-01-11")
+    # print json.dumps(getPurchases("58000d58360f81f104543d82"))
+
