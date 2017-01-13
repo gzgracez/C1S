@@ -191,14 +191,21 @@ def getAllocationsDate(customerID, date):
             allocations.append(row)
         return allocations
 
-def updateAllocations(customerID):
+def deleteAllocations(dateString):
     with conn.cursor() as cur:
-        dateString = datetime.date.today().strftime('%Y-%m-%d')
         cur.execute("delete from allocations where day < '{}';".format(dateString))
         conn.commit()
         return True
 
-if __name__=="__main__":
-    print updateAllocations("58000d58360f81f104543d82")
+def updateAllocations(customerID):
+    with conn.cursor() as cur:
+        today = datetime.date.today().strftime('%Y-%m-%d')
+        return deleteAllocations(today)
+
+# if __name__=="__main__":
+    # print addAllocation("58000d58360f81f104543d82", "food", 20, '2017-1-12')
+    # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-10')
+    # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-11')
+    # print updateAllocations("58000d58360f81f104543d82")
     # print getAllocationsDate("58000d58360f81f104543d82","2017-01-11")
     # print json.dumps(getPurchases("58000d58360f81f104543d82"))
