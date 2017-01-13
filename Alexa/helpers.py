@@ -138,7 +138,7 @@ def calculateSuggestedByCategory(customerID, category, dow):
 # calculateSuggestedToday("58000d58360f81f104543d82", 3)
 def calculateSuggestedToday(customerID, dow):
     total = getTotalforDOW(customerID, dow)
-    avg = total[0] / total[1]
+    avg = total[0] / total[1] if total[1] else total[1]
     currentBalance = getTotalBalance(customerID)
     if avg > currentBalance:
         totalBalance = getTotalBalance(customerID)
