@@ -203,10 +203,12 @@ def updateAllocations(customerID):
         return deleteAllocations(today)
 
 # if __name__=="__main__":
-    # print addAllocation("58000d58360f81f104543d82", "food", 20, '2017-1-12')
-    # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-10')
-    # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-11')
+#     print getAllocations("58000d58360f81f104543d82")
+    # print calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", 2)
+    # print addAllocation("58000d58360f81f104543d82", "food", 20, '2017-1-13')
+    # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-13')
+    # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-13')
     # print updateAllocations("58000d58360f81f104543d82")
-    # print getAllocationsDate("58000d58360f81f104543d82","2017-01-11")
+    # print getAllocationsDate("58000d58360f81f104543d82","2017-01-12")
     # print json.dumps(getPurchases("58000d58360f81f104543d82"))
 
