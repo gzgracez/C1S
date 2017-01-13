@@ -5,7 +5,7 @@ import sys
 import os
 import datetime
 sys.path.append('../Alexa')
-from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday, getAllocations
+from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday, getAllocations, addAllocation, updateAllocations
 # import ../AlexaSkill/helpers.py
 
 app = Flask(__name__)
@@ -85,20 +85,24 @@ def purchases():
     for key in result:
         purchase = result[key]
         d.append({"merchantID": purchase[3], "purchaseDate": purchase[1], "amount": "${:,.2f}".format(purchase[2])})
-        d = sorted(d, key=lambda k: datetime.datetime.strptime(k['purchaseDate'],"%Y-%m-%d"), reverse=True)
+    d = sorted(d, key=lambda k: datetime.datetime.strptime(k['purchaseDate'],"%Y-%m-%d"), reverse=True)
     return render_template("purchases.html", purchases=d)
 
-@app.route("/allocations")
+@app.route("/allocations", methods=["GET", "POST"])
 def allocations():
+    if request.method == "POST":
+        addAllocation(customerID, request.form["category"], request.form["amount"], request.form["date"])
+    updateAllocations(customerID)
     data = getAllocations(customerID)
     print(str(data))
     l = []
     total = 0
     for dat in data:
-        l.append({"cat": dat[0], "amount": str(dat[1])})
+        l.append({"cat": dat[0], "amount": "${:,.2f}".format(dat[1]), "date": dat[3]})
         total += dat[1]
+    l = sorted(l, key=lambda k: datetime.datetime.strftime(k['date'],"%Y-%m-%d"), reverse=True)
     print(l)
-    return render_template("allocations.html", allocations=l, total=total)
+    return render_template("allocations.html", allocations=l, total="${:,.2f}".format(total))
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')

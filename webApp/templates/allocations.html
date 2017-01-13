@@ -2,12 +2,19 @@
 {% block title %}Today's Allocated Amounts{% endblock %}
 {% block content %}
     <table id="allocations" class="striped">
-        <tr class="blue accent-3"><td>Category</td><td>Allocated Amount</td></tr>
+        <tr class="blue accent-3"><td>Category</td><td>Date</td><td>Allocated Amount</td></tr>
         {% for alloc in allocations %}
-            <tr><td>{{ alloc.cat }}</td><td>${{ alloc.amount }}</td></tr>
+            <tr><td>{{ alloc.cat }}</td><td>{{ alloc.date }}</td><td>{{ alloc.amount }}</td></tr>
         {% endfor %}
-        <tr class="card-panel blue lighten-4"><td>total</td><td>${{ total }}</td></tr>
+        <tr class="card-panel blue lighten-4"><td>total</td><td><td>{{ total }}</td></tr>
     </table>
+    <form action="" method="post">
+        <p>Add Allocation:</p>
+        <input type="text" placeholder="category" name="category">
+        <input type="text" placeholder="amount" name="amount">
+        <input type="text" placeholder="date yyyy-mm-dd" name="date">
+        <input class="btn btn-default" type="submit" value="Go!">
+    </form>
     <script>
         selection(1);
     </script>
