@@ -118,14 +118,10 @@ def getCategoryTotalforDOW(customerID, category, day):
                 cat = "misc"
             else:
                 cat = categories[0]
-            # print cat
-            # print purchases[i][2]
             dow = datetime.datetime.strptime(purchases[i][1], '%Y-%m-%d').date().weekday()
             if dow == day and cat.lower() == category.lower():
                 total += purchases[i][2]
                 count += 1
-                print cat
-                print purchases[i][2]
         else:
             continue
     return [total, count]
@@ -145,6 +141,7 @@ def getTotalforDOW(customerID, day):
 # calculateSuggestedByCategory("58000d58360f81f104543d82", "food", 3)
 def calculateSuggestedByCategory(customerID, category, dow):
     total = getCategoryTotalforDOW(customerID, category, dow)
+    if total[1] == 0: return None
     avg = total[0] / total[1]
     currentBalance = getTotalBalance(customerID)
     if avg > currentBalance:
@@ -158,7 +155,8 @@ def calculateSuggestedByCategory(customerID, category, dow):
 # calculateSuggestedToday("58000d58360f81f104543d82", 3)
 def calculateSuggestedToday(customerID, dow):
     total = getTotalforDOW(customerID, dow)
-    avg = total[0] / total[1] if total[1] else total[1]
+    if total[1] == 0: return None
+    avg = total[0] / total[1]
     currentBalance = getTotalBalance(customerID)
     if avg > currentBalance:
         totalBalance = getTotalBalance(customerID)
@@ -167,7 +165,7 @@ def calculateSuggestedToday(customerID, dow):
     else:
         return avg
 
-# if __name__=="__main__":
-    # print getCategoryTotalforDOW("58000d58360f81f104543d82", "food", 3)
+if __name__=="__main__":
+    # print getCategoryTotalforDOW("58000d58360f81f104543d82", "grocery", 1)
     # print getTotalBalance("58000d58360f81f104543d82")
-    # print calculateSuggestedByCategory("58000d58360f81f104543d82", "food", 3)
+    # print calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 1)
