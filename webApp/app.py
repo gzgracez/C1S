@@ -5,7 +5,7 @@ import sys
 import os
 import datetime
 sys.path.append('../Alexa')
-from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday, getAllocations, addAllocation, updateAllocations
+from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday, getAllocations, addAllocation, updateAllocations, getPurchasesLimited
 # import ../AlexaSkill/helpers.py
 
 app = Flask(__name__)
@@ -81,7 +81,7 @@ def purchases():
     if checkAuth() == False:
         return redirect(url_for("login"))
     d = []
-    result = getPurchases(customerID)
+    result = getPurchasesLimited(customerID)
     for key in result:
         purchase = result[key]
         d.append({"merchantID": purchase[3], "purchaseDate": purchase[1], "amount": "${:,.2f}".format(purchase[2])})
