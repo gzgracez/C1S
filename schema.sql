@@ -1,0 +1,1 @@
+CREATE TABLE allocations (category VARCHAR(20), amount INT, customerID VARCHAR(35), day DATE, PRIMARY KEY(customerID));

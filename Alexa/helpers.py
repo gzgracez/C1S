@@ -17,20 +17,17 @@ except Exception as e:
 
 print("SUCCESS: Connection to RDS mysql instance succeeded")
 
-def handler(event, context):
+def handler():
     
     item_count = 0
 
     with conn.cursor() as cur:
-        cur.execute("create table Employee3 ( EmpID  int NOT NULL, Name varchar(255) NOT NULL, PRIMARY KEY (EmpID))")  
-        cur.execute('insert into Employee3 (EmpID, Name) values(1, "Joe")')
-        cur.execute('insert into Employee3 (EmpID, Name) values(2, "Bob")')
-        cur.execute('insert into Employee3 (EmpID, Name) values(3, "Mary")')
+        cur.execute('INSERT into allocations (category, amount, customerID, day) values("food", 16, "58000d58360f81f104543d82", "2017-1-11");')
         conn.commit()
-        cur.execute("select * from Employee3")
+        cur.execute("select * from allocations")
         for row in cur:
             item_count += 1
-            logger.info(row)
+            print(row)
             #print(row)
     return "Added %d items from RDS MySQL table" %(item_count)
 
@@ -165,7 +162,17 @@ def calculateSuggestedToday(customerID, dow):
     else:
         return avg
 
+def addAllocation(customerID, category, amount, day):
+    with conn.cursor() as cur:
+        cur.execute('INSERT into allocations (category, amount, customerID, day) values("{}", {}, "{}", "{}");'.format(category, amount, customerID, day))
+        conn.commit()
+    return True
+
+# def getAllocations():
+    
+
 if __name__=="__main__":
+    print handler()
     # print getCategoryTotalforDOW("58000d58360f81f104543d82", "grocery", 1)
     # print getTotalBalance("58000d58360f81f104543d82")
     # print calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 1)
