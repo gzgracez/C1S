@@ -106,6 +106,32 @@ def getPurchases(customerID):
         else:
             return None
 
+# returns a dictionary of all purchases: {purchaseID, [merchantID, purchaseDate, amount]}
+def getPurchasesLimited(customerID):
+    accounts = getAccounts(customerID)
+    count = 0
+    for i in accounts:
+        accountID = i["_id"]
+        purchasesUrl = 'http://api.reimaginebanking.com/accounts/{}/purchases?key={}'.format(accountID, apiKey)
+        purchases = {}
+        purchasesResponse = requests.get(purchasesUrl)
+        if purchasesResponse.status_code == 200:
+            purchasesJSON = json.loads(purchasesResponse.text)
+            for i in purchasesJSON:
+                if count == 20:
+                    return purchases
+                if i["medium"].lower() == "balance":
+                    merchantID = i["merchant_id"]
+                    merchantUrl = 'http://api.reimaginebanking.com/merchants/{}?key={}'.format(merchantID, apiKey)
+                    if purchasesResponse.status_code == 200:
+                        merchantsResponse = requests.get(merchantUrl)
+                        merchantJSON = json.loads(merchantsResponse.text)
+                        purchases[i["_id"]] = [merchantID, i["purchase_date"], i["amount"], merchantJSON["name"]]
+                        count += 1
+            return purchases
+        else:
+            return None
+
 def getCategoryTotalforDOW(customerID, category, day):
     total = 0
     count = 0
@@ -203,7 +229,7 @@ def updateAllocations(customerID):
         return deleteAllocations(today)
 
 # if __name__=="__main__":
-#     print getAllocations("58000d58360f81f104543d82")
+#     print getPurchasesLimited("58000d58360f81f104543d82")
     # print calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", 2)
     # print addAllocation("58000d58360f81f104543d82", "food", 20, '2017-1-13')
     # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-13')
@@ -211,4 +237,3 @@ def updateAllocations(customerID):
     # print updateAllocations("58000d58360f81f104543d82")
     # print getAllocationsDate("58000d58360f81f104543d82","2017-01-12")
     # print json.dumps(getPurchases("58000d58360f81f104543d82"))
-
