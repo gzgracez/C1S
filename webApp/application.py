@@ -37,7 +37,6 @@ def home():
     msg = ""
     if not session.get('logged_in'):
         return redirect(url_for("login"))
-<<<<<<< HEAD:webApp/application.py
     elif request.method == "POST":
         if request.form['category'] == 'groceries':
             value = calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 1)
@@ -61,18 +60,6 @@ def home():
     totalBalance = "${:,.2f}".format(getTotalBalance(customerID)),
     targetToday = "${:,.2f}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())),
     suggestion = msg)
-=======
-    else:
-        ab = []
-        result = getResult()
-        for key in result:
-            account = result[key]
-            ab.append({"type": account[0], "balance": "${:,.2f}".format(account[1])})
-        yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
-        return render_template("index.html", checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
-        totalBalance = "${:,.2f}".format(getTotalBalance(customerID)),
-        targetToday = "${:,.2f}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())))
->>>>>>> 1e4a40e7a388cd953f004cc84b0802bc0e1eab2b:webApp/app.py
 
 @application.route('/login', methods=["GET", 'POST'])
 def login():
