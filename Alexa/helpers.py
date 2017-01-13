@@ -94,7 +94,12 @@ def getPurchases(customerID):
             purchasesJSON = json.loads(purchasesResponse.text)
             for i in purchasesJSON:
                 if i["medium"].lower() == "balance":
-                    purchases[i["_id"]] = [i["merchant_id"], i["purchase_date"], i["amount"]]
+                    merchantID = i["merchant_id"]
+                    merchantUrl = 'http://api.reimaginebanking.com/merchants/{}?key={}'.format(merchantID, apiKey)
+                    if purchasesResponse.status_code == 200:
+                        merchantsResponse = requests.get(merchantUrl)
+                        merchantJSON = json.loads(merchantsResponse.text)
+                        purchases[i["_id"]] = [merchantID, i["purchase_date"], i["amount"], merchantJSON["name"]]
             return purchases
         else:
             return None
@@ -169,10 +174,10 @@ def addAllocation(customerID, category, amount, day):
     return True
 
 # def getAllocations():
-    
+
 
 if __name__=="__main__":
-    print handler()
+    # print json.dumps(getPurchases("58000d58360f81f104543d82"))
     # print getCategoryTotalforDOW("58000d58360f81f104543d82", "grocery", 1)
     # print getTotalBalance("58000d58360f81f104543d82")
     # print calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 1)
