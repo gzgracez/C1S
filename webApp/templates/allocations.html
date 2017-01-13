@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Today's Allocated Amounts{% endblock %}
+{% block content %}
+    <table id="allocations" class="striped">
+        <tr class="blue accent-3"><td>Category</td><td>Allocated Amount</td></tr>
+        {% for alloc in allocations %}
+            <tr><td>{{ alloc.cat }}</td><td>${{ alloc.amount }}</td></tr>
+        {% endfor %}
+        <tr class="card-panel blue lighten-4"><td>total</td><td>${{ total }}</td></tr>
+    </table>
+    <script>
+        selection(1);
+    </script>
+{% endblock %}
