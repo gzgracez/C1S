@@ -17,19 +17,19 @@ except Exception as e:
 
 print("SUCCESS: Connection to RDS mysql instance succeeded")
 
-def handler():
+# def handler():
     
-    item_count = 0
+#     item_count = 0
 
-    with conn.cursor() as cur:
-        cur.execute('INSERT into allocations (category, amount, customerID, day) values("food", 16, "58000d58360f81f104543d82", "2017-1-11");')
-        conn.commit()
-        cur.execute("select * from allocations")
-        for row in cur:
-            item_count += 1
-            print(row)
-            #print(row)
-    return "Added %d items from RDS MySQL table" %(item_count)
+#     with conn.cursor() as cur:
+#         cur.execute('INSERT into allocations (category, amount, customerID, day) values("food", 16, "58000d58360f81f104543d82", "2017-1-11");')
+#         conn.commit()
+#         cur.execute("select * from allocations")
+#         for row in cur:
+#             item_count += 1
+#             print(row)
+#             #print(row)
+#     return "Added %d items from RDS MySQL table" %(item_count)
 
 apiKey = "638e3a40768577cc14440e93f78f7085"
 
@@ -173,11 +173,22 @@ def addAllocation(customerID, category, amount, day):
         conn.commit()
     return True
 
-# def getAllocations():
+def getAllocations(customerID):
+    with conn.cursor() as cur:
+        cur.execute("select * from allocations where customerID='{}'".format(customerID))
+        allocations = []
+        for row in cur:
+            allocations.append(row)
+        return allocations
 
+def getAllocationsDate(customerID, date):
+    with conn.cursor() as cur:
+        cur.execute("select * from allocations where customerID='{}' and day='{}'".format(customerID, date))
+        allocations = []
+        for row in cur:
+            allocations.append(row)
+        return allocations
 
 # if __name__=="__main__":
+    # print getAllocationsDate("58000d58360f81f104543d82","2017-01-11")
     # print json.dumps(getPurchases("58000d58360f81f104543d82"))
-    # print getCategoryTotalforDOW("58000d58360f81f104543d82", "grocery", 1)
-    # print getTotalBalance("58000d58360f81f104543d82")
-    # print calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 1)
