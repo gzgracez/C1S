@@ -61,7 +61,7 @@ def get_checking_balance_handler(request):
 @alexa.intent_handler("GiveSuggestions")
 def give_suggestions_handler(request):
     #retrieve what category the user wanted
-    category = str(request.get_slot_value("category")).lower()
+    category = str(request.get_slot_value("category"))
     #retrieve what day of the week it is
     day = str(request.get_slot_value("day")).lower()
     #start with empty string
@@ -69,10 +69,13 @@ def give_suggestions_handler(request):
     #dayInteger
     dayInteger = 0
     #if the user didn't provide category, tell it to try again
-    if not category or day:
-        message = message + "Please try again and specify the category or day."
-        boolEndValue = False
-    #when the user did provide category, follow through
+    if category == "None":
+        message = message + "Please try again and specify the category."
+        return alexa.create_response(message=message, end_session=False)
+    elif day == "none":
+        message = message + "Please try again and specify the day."
+        return alexa.create_response(message=message, end_session=False)
+    #assign dayInteger because function parameter issue for calculateSuggestedByCategory
     else:
         if day == "monday":
             dayInteger = 0
@@ -88,32 +91,35 @@ def give_suggestions_handler(request):
             dayInteger = 5
         elif day == "sunday":
             dayInteger = 6
-
+        #match category with value
         if category == "groceries" or category=="grocery":
             value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", dayInteger)
+            if value == None:
+                value = 0
             message = message + "For {} on {}, you should spend ${}.".format(category, day, value)
-            boolEndValue = True
         elif category == "food" or category == "foods":
             value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "food", dayInteger)
-            message = message + "For {}on {}, you should spend ${}.".format(category, day, value)
-            boolEndValue = True
+            if value == None:
+                value = 0
+            message = message + "For {} on {}, you should spend ${}.".format(category, day, value)
         elif category == "gas":
             value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", dayInteger)
-            message = message + "For {}on {}, you should spend ${}.".format(category, day, value)
-            boolEndValue = True
+            if value == None:
+                value = 0
+            message = message + "For {} on {}, you should spend ${}.".format(category, day, value)
         elif category == "shopping":
             value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "shopping", dayInteger)
-            message = message + "For {}on {}, you should spend ${}.".format(category, day, value)
-            boolEndValue = True
+            if value == None:
+                value = 0
+            message = message + "For {} on {}, you should spend ${}.".format(category, day, value)
         elif category == "clothes" or category == "clothings":
             value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "clothing", dayInteger)
-            message = message + "For {}on {}, you should spend ${}.".format(category, day, value)
-            boolEndValue = True
+            if value == None:
+                value = 0
+            message = message + "For {} on {}, you should spend ${}.".format(category, day, value)
         else:
             message = message + "Sorry, we don't have information about that. Try a different category."
-            boolEndValue = False
-
-    return alexa.create_response(message=message, end_session=boolEndValue)
+        return alexa.create_response(message=message, end_session=True)
 
 
 @alexa.intent_handler("AMAZON.HelpIntent")
