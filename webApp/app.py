@@ -44,9 +44,9 @@ def home():
             account = result[key]
             ab.append({"type": account[0], "balance": "${:,.2f}".format(account[1])})
         yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
-        return render_template("index.html")#, checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
-        #totalBalance = "${:,.2f}".format(getTotalBalance(customerID)),
-        #targetToday = "${:,.2s}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())))
+        return render_template("index.html", checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
+        totalBalance = "${:,.2f}".format(getTotalBalance(customerID)),
+        targetToday = "${:,.2f}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())))
 
 @app.route('/login', methods=["GET", 'POST'])
 def login():

@@ -32,7 +32,15 @@
             <div id="content" class = "container"><nav class="indigo darken-4">
               <div class="nav-wrapper">
                 <a href="#!" class="brand-logo"><i class="material-icons">equalizer</i>All Skill</a>
+                <a href="#" data-activates="mobile" class="button-collapse"><i class="material-icons">menu</i></a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/accounts">Accounts</a></li>
+                  <li><a href="/allocations">Allocations</a></li>
+                  <li><a href="/purchases">Purchases</a></li>
+                  <li><a href="/logout">Logout</a></li>
+                </ul>
+                <ul class="side-nav" id="mobile">
                   <li><a href="/">Home</a></li>
                   <li><a href="/accounts">Accounts</a></li>
                   <li><a href="/allocations">Allocations</a></li>
@@ -41,6 +49,7 @@
                 </ul>
               </div>
             </nav>
+            <script>$( document ).ready(function(){$(".button-collapse").sideNav();})</script>
             {% block content %}{% endblock %}</div>
         {% endblock %}
     </body>
