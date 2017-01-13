@@ -209,3 +209,4 @@ def updateAllocations(customerID):
     # print updateAllocations("58000d58360f81f104543d82")
     # print getAllocationsDate("58000d58360f81f104543d82","2017-01-11")
     # print json.dumps(getPurchases("58000d58360f81f104543d82"))
+
