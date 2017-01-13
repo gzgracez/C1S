@@ -3,8 +3,9 @@ import requests
 import json
 import sys
 import os
+import datetime
 sys.path.append('../Alexa')
-from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance
+from helpers import getAccounts, getAccountAndBalance, getCheckingBalance, getTotalBalance, getPurchases,getTotalforDOW, calculateSuggestedToday
 # import ../AlexaSkill/helpers.py
 
 app = Flask(__name__)
@@ -15,12 +16,32 @@ API_KEY = "638e3a40768577cc14440e93f78f7085"
 BASE_NESSIE_URL = "http://api.reimaginebanking.com/"
 customerID = "58000d58360f81f104543d82" #TODO: change this because this is zuck
 
+def getResult():
+    if not session.get('logged_in'):
+        flash("Not logged in!")
+        return redirect(url_for("login"))
+    result = getAccountAndBalance(customerID)
+    return result
+
+def checkAuth():
+    if not session.get('logged_in'):
+        return False
+    return True
+
 @app.route('/')
 def home():
     if not session.get('logged_in'):
         return redirect(url_for("login"))
     else:
-        return render_template("home.html")
+        ab = []
+        result = getResult()
+        for key in result:
+            account = result[key]
+            ab.append({"type": account[0], "balance": "${:,.2f}".format(account[1])})
+        yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+        return render_template("home.html", checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
+        totalBalance = "${:,.2f}".format(getTotalBalance(customerID)),
+        targetToday = "${:,.2f}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())))
 
 @app.route('/login', methods=["GET", 'POST'])
 def login():
@@ -38,11 +59,10 @@ def logout():
 
 @app.route("/accounts")
 def listAccounts():
-    if not session.get('logged_in'):
-        flash("Not logged in!")
+    if checkAuth() == False:
         return redirect(url_for("login"))
-    result = getAccountAndBalance(customerID)
     ab = []
+    result = getResult()
     for key in result:
         account = result[key]
         ab.append({"type": account[0], "balance": "${:,.2f}".format(account[1])})
@@ -53,6 +73,23 @@ def listAccounts():
 
     # go through nessie APi
     # list accounts and balancee
+
+@app.route("/suggestions")
+def suggestions():
+    if checkAuth() == False:
+        return redirect(url_for("login"))
+    return render_template("suggest.html")
+
+@app.route("/purchases")
+def purchases():
+    if checkAuth() == False:
+        return redirect(url_for("login"))
+    d = []
+    result = getPurchases(customerID)
+    for key in result:
+        purchase = result[key]
+        d.append({"merchantID": purchase[0], "purchaseDate": purchase[1], "amount": "${:,.2f}".format(purchase[2])})
+    return render_template("purchases.html", purchases=d)
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')

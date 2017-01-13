@@ -13,21 +13,36 @@
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		{% endblock %}
     </head>
+    <script>
+        function selection(n) {
+            i=0;
+            console.log("poo");
+            $('#nav-mobile > li').each(function () { 
+                if(i==n) $(this).addClass("active");
+                else $(this).removeClass("active");
+                i++;
+            });
+        }
+    </script>
     <body>
         {% block body %}
             <!--Import jQuery before materialize.js-->
             <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
             <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
-            <div id="content" class = "container"><nav>
+            <div id="content" class = "container"><nav class="teal accent-4">
               <div class="nav-wrapper">
-                <a href="/" class="brand-logo"> All Skill</a>
+                <a href="/" class="brand-logo">All Skill</a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                   <li><a href="/">Home</a></li>
                   <li><a href="/accounts">Accounts</a></li>
+                  <li><a href="/suggestions">Suggestions</a></li>
+                  <li><a href="/purchases">Purchases</a></li>
+                  <li><a href="/logout">Logout</a></li>
                 </ul>
               </div>
             </nav>
             {% block content %}{% endblock %}</div>
         {% endblock %}
     </body>
+
 </head>

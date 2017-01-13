@@ -1,6 +1,38 @@
 import requests
 import json
 import datetime
+import pymysql
+import sys
+#rds settings
+rds_host  = "allskill-db.cbzix5fu8xra.us-east-1.rds.amazonaws.com"
+name = "allskill"
+password = "noskill123"
+db_name = "allskill"
+
+try:
+    conn = pymysql.connect(rds_host, user=name, passwd=password, db=db_name, connect_timeout=5, port=3306)
+except Exception as e:
+    print("ERROR: Unexpected error: Could not connect to MySql instance. \nError: {error}".format(error=e))
+    sys.exit()
+
+print("SUCCESS: Connection to RDS mysql instance succeeded")
+
+def handler(event, context):
+    
+    item_count = 0
+
+    with conn.cursor() as cur:
+        cur.execute("create table Employee3 ( EmpID  int NOT NULL, Name varchar(255) NOT NULL, PRIMARY KEY (EmpID))")  
+        cur.execute('insert into Employee3 (EmpID, Name) values(1, "Joe")')
+        cur.execute('insert into Employee3 (EmpID, Name) values(2, "Bob")')
+        cur.execute('insert into Employee3 (EmpID, Name) values(3, "Mary")')
+        conn.commit()
+        cur.execute("select * from Employee3")
+        for row in cur:
+            item_count += 1
+            logger.info(row)
+            #print(row)
+    return "Added %d items from RDS MySQL table" %(item_count)
 
 apiKey = "638e3a40768577cc14440e93f78f7085"
 
@@ -86,10 +118,14 @@ def getCategoryTotalforDOW(customerID, category, day):
                 cat = "misc"
             else:
                 cat = categories[0]
+            # print cat
+            # print purchases[i][2]
             dow = datetime.datetime.strptime(purchases[i][1], '%Y-%m-%d').date().weekday()
-            if dow == day and cat == category:
+            if dow == day and cat.lower() == category.lower():
                 total += purchases[i][2]
                 count += 1
+                print cat
+                print purchases[i][2]
         else:
             continue
     return [total, count]
@@ -122,7 +158,7 @@ def calculateSuggestedByCategory(customerID, category, dow):
 # calculateSuggestedToday("58000d58360f81f104543d82", 3)
 def calculateSuggestedToday(customerID, dow):
     total = getTotalforDOW(customerID, dow)
-    avg = total[0] / total[1]
+    avg = total[0] / total[1] if total[1] else total[1]
     currentBalance = getTotalBalance(customerID)
     if avg > currentBalance:
         totalBalance = getTotalBalance(customerID)
@@ -130,3 +166,8 @@ def calculateSuggestedToday(customerID, dow):
         return fraction * totalBalance
     else:
         return avg
+
+# if __name__=="__main__":
+    # print getCategoryTotalforDOW("58000d58360f81f104543d82", "food", 3)
+    # print getTotalBalance("58000d58360f81f104543d82")
+    # print calculateSuggestedByCategory("58000d58360f81f104543d82", "food", 3)

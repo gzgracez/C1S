@@ -3,7 +3,13 @@
 {% block content %}
     <div class="card-panel teal lighten-2" id="content">
         <h1>Welcome to All Skill Team!</h1>
-        <a href = "/accounts">List all accounts</a>
+        <!--<a href = "/accounts">List all accounts</a>-->
     </div>
+    <div class="card-panel teal lighten-1">
+            <h5>Hello, your total current balance is {{ totalBalance }}.</h5>
+            <h6>Today's target spending is {{ targetToday }}</h6>
+    </div>
+    <script>
+        selection(0);
+    </script>
 {% endblock %}
-

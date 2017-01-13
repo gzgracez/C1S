@@ -70,8 +70,8 @@ def give_suggestions_handler(request):
         boolEndValue = False
     #when the user did provide category, follow through
     else:
-        if category == "groceries":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", category, 3)
+        if category == "shopping":
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "store", 3)
             message = message + "For {}, you should spend ${}.".format(category, value)
             boolEndValue = True
         elif category == "food":
@@ -79,7 +79,7 @@ def give_suggestions_handler(request):
             message = message + "For {}, you should spend ${}.".format(category, value)
             boolEndValue = True
         elif category == "gas":
-            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", category, 3)
+            value = helpers.calculateSuggestedByCategory("58000d58360f81f104543d82", "food", 3)
             message = message + "For {}, you should spend ${}.".format(category, value)
             boolEndValue = True
         elif category == "shopping":
@@ -93,7 +93,7 @@ def give_suggestions_handler(request):
         else:
             message = message + "Sorry, we don't have information about that. Try a different category."
             boolEndValue = False
-            
+
     return alexa.create_response(message=message, end_session=boolEndValue)
 
 
