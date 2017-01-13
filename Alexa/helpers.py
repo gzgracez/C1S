@@ -1,7 +1,6 @@
 import requests
 import json
 import datetime
-import logging
 import pymysql
 import sys
 #rds settings
@@ -17,6 +16,23 @@ except Exception as e:
     sys.exit()
 
 print("SUCCESS: Connection to RDS mysql instance succeeded")
+
+def handler(event, context):
+    
+    item_count = 0
+
+    with conn.cursor() as cur:
+        cur.execute("create table Employee3 ( EmpID  int NOT NULL, Name varchar(255) NOT NULL, PRIMARY KEY (EmpID))")  
+        cur.execute('insert into Employee3 (EmpID, Name) values(1, "Joe")')
+        cur.execute('insert into Employee3 (EmpID, Name) values(2, "Bob")')
+        cur.execute('insert into Employee3 (EmpID, Name) values(3, "Mary")')
+        conn.commit()
+        cur.execute("select * from Employee3")
+        for row in cur:
+            item_count += 1
+            logger.info(row)
+            #print(row)
+    return "Added %d items from RDS MySQL table" %(item_count)
 
 apiKey = "638e3a40768577cc14440e93f78f7085"
 
