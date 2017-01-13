@@ -17,20 +17,6 @@ except Exception as e:
 
 print("SUCCESS: Connection to RDS mysql instance succeeded")
 
-# def handler():
-    
-#     item_count = 0
-
-#     with conn.cursor() as cur:
-#         cur.execute('INSERT into allocations (category, amount, customerID, day) values("food", 16, "58000d58360f81f104543d82", "2017-1-11");')
-#         conn.commit()
-#         cur.execute("select * from allocations")
-#         for row in cur:
-#             item_count += 1
-#             print(row)
-#             #print(row)
-#     return "Added %d items from RDS MySQL table" %(item_count)
-
 apiKey = "638e3a40768577cc14440e93f78f7085"
 
 # returns array of accounts
@@ -68,6 +54,22 @@ def getCreditCardBalance(customerID):
         if i["type"].lower() == "credit card":
             credit += i["balance"]
     return credit
+
+# returns integer of actual balance (checking - credit card - allocations)
+def getActualBalance(customerID):
+    accounts = getAccounts(customerID)
+    current = 0
+    for i in accounts:
+        if i["type"].lower() == "credit card":
+            current -= i["balance"]
+        elif i["type"].lower() == "checking":
+            current += i["balance"]
+        else:
+            continue
+    allocations = getAllocations(customerID)
+    for i in allocations:
+        current -= i[1]
+    return current
 
 # returns integer of current balance (checking - credit card)
 def getTotalBalance(customerID):
@@ -189,6 +191,7 @@ def getAllocationsDate(customerID, date):
             allocations.append(row)
         return allocations
 
-# if __name__=="__main__":
+if __name__=="__main__":
+    print getActualBalance("58000d58360f81f104543d82")
     # print getAllocationsDate("58000d58360f81f104543d82","2017-01-11")
     # print json.dumps(getPurchases("58000d58360f81f104543d82"))
