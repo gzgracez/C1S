@@ -202,7 +202,8 @@ def updateAllocations(customerID):
         today = datetime.date.today().strftime('%Y-%m-%d')
         return deleteAllocations(today)
 
-# if __name__=="__main__":
+if __name__=="__main__":
+    print calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 4)
     # print addAllocation("58000d58360f81f104543d82", "food", 20, '2017-1-12')
     # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-10')
     # print addAllocation("58000d58360f81f104543d82", "food", 15, '2017-1-11')

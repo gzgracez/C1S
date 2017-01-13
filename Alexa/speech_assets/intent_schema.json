@@ -16,6 +16,13 @@
                         {"name": "day", "type": "DAYS"}]
         },
         {
+            "intent": "Allocations",
+            "slots": [
+                        {"name": "amount", "type": "AMAZON.NUMBER"},
+                        {"name": "category", "type": "CATEGORIES"},
+                        {"name": "date", "type": "AMAZON.DATE"}]
+        },
+        {
             "intent": "AMAZON.HelpIntent"
         },
         {
