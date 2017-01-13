@@ -93,8 +93,8 @@ def purchases():
     result = getPurchases(customerID)
     for key in result:
         purchase = result[key]
-        name = getMerchantName(purchase[0])
-        d.append({"merchantID": name, "purchaseDate": purchase[1], "amount": "${:,.2f}".format(purchase[2])})
+        d.append({"merchantID": purchase[3], "purchaseDate": purchase[1], "amount": "${:,.2f}".format(purchase[2])})
+        d = sorted(d, key=lambda k: datetime.datetime.strptime(k['purchaseDate'],"%Y-%m-%d"), reverse=True)
     return render_template("purchases.html", purchases=d)
 
 if __name__ == "__main__":
