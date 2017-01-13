@@ -13,8 +13,8 @@ GetCreditBalance 	what is my credit card balance
 GetCreditBalance 	how much money can I spend with my credit card
 GetCreditBalance 	how much balance is remaining in my credit card
 
-GiveSuggestions			How much should I spend on {category} today
-GiveSuggestions 		how much can i spend on {category} today
+GiveSuggestions			How much should I spend on {category} 
+GiveSuggestions 		how much can i spend on {category} 
 GiveSuggestions 		how much do i get to spend on {category}
 
 AMAZON.HelpIntent    what can I say
