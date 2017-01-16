@@ -229,6 +229,9 @@ def updateAllocations(customerID):
         return deleteAllocations(today)
 
 # if __name__=="__main__":
+#     print calculateSuggestedToday("58000d58360f81f104543d82", 4)
+#     print calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", 4)
+# if __name__=="__main__":
 #     print getPurchasesLimited("58000d58360f81f104543d82")
     # print calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", 2)
     # print addAllocation("58000d58360f81f104543d82", "food", 20, '2017-1-13')
