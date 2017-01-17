@@ -3,11 +3,14 @@ import json
 import datetime
 import pymysql
 import sys
+import config
 #rds settings
 rds_host  = "allskill-db.cbzix5fu8xra.us-east-1.rds.amazonaws.com"
 name = "allskill"
 password = "noskill123"
 db_name = "allskill"
+
+apiKey = config.apiKey
 
 try:
     conn = pymysql.connect(rds_host, user=name, passwd=password, db=db_name, connect_timeout=5, port=3306)
@@ -16,8 +19,6 @@ except Exception as e:
     sys.exit()
 
 print("SUCCESS: Connection to RDS mysql instance succeeded")
-
-apiKey = "638e3a40768577cc14440e93f78f7085"
 
 # returns array of accounts
 def getAccounts(customerID):
@@ -64,6 +65,8 @@ def getActualBalance(customerID):
             current -= i["balance"]
         elif i["type"].lower() == "checking":
             current += i["balance"]
+        elif i["type"].lower() == "savings":
+            current += i["balance"]
         else:
             continue
     allocations = getAllocations(customerID)
@@ -79,6 +82,8 @@ def getTotalBalance(customerID):
         if i["type"].lower() == "credit card":
             current -= i["balance"]
         elif i["type"].lower() == "checking":
+            current += i["balance"]
+        elif i["type"].lower() == "savings":
             current += i["balance"]
         else:
             continue
@@ -118,7 +123,7 @@ def getPurchasesLimited(customerID):
         if purchasesResponse.status_code == 200:
             purchasesJSON = json.loads(purchasesResponse.text)
             for i in purchasesJSON:
-                if count == 20:
+                if count == 15:
                     return purchases
                 if i["medium"].lower() == "balance":
                     merchantID = i["merchant_id"]

@@ -11,7 +11,6 @@ application = Flask(__name__)
 application.config['DEBUG'] = True
 application.secret_key = os.urandom(12)
 
-API_KEY = "638e3a40768577cc14440e93f78f7085"
 BASE_NESSIE_URL = "http://api.reimaginebanking.com/"
 customerID = "58000d58360f81f104543d82" #TODO: change this because this is zuck
 
@@ -28,7 +27,7 @@ def checkAuth():
     return True
 
 def getMerchantName(merchantID):
-    merchantURL = "http://api.reimaginebanking.com/merchants/%s?key=%s" %(merchantID, API_KEY)
+    merchantURL = "http://api.reimaginebanking.com/merchants/%s?key=%s" %(merchantID, apiKey)
     merchantName = json.loads(requests.get(merchantURL).text)["name"]
     return merchantName
 
@@ -41,29 +40,29 @@ def home():
         if request.form['category'] == 'groceries':
             value = calculateSuggestedByCategory("58000d58360f81f104543d82", "grocery", datetime.datetime.now().weekday())
             if value == None: value = 0
-            msg = "For {}, you should spend ${}.".format('groceries', value)
+            msg = "For {}, you should spend ${:,.2f}.".format('groceries', value)
         elif request.form['category'] == 'food':
             value = calculateSuggestedByCategory("58000d58360f81f104543d82", "food", datetime.datetime.now().weekday())
             if value == None: value = 0
-            msg = "For {}, you should spend ${}.".format('food', value)
+            msg = "For {}, you should spend ${:,.2f}.".format('food', value)
         elif request.form['category'] == 'gas':
             value = calculateSuggestedByCategory("58000d58360f81f104543d82", "gas", datetime.datetime.now().weekday())
             if value == None: value = 0
-            msg = "For {}, you should spend ${}.".format('gas', value)
+            msg = "For {}, you should spend ${:,.2f}.".format('gas', value)
         elif request.form['category'] == 'shopping':
             value = calculateSuggestedByCategory("58000d58360f81f104543d82", "shopping", datetime.datetime.now().weekday())
             if value == None: value = 0
-            msg = "For {}, you should spend ${}.".format('shopping', value)
+            msg = "For {}, you should spend ${:,.2f}.".format('shopping', value)
         elif request.form['category'] == 'clothing':
             value = calculateSuggestedByCategory("58000d58360f81f104543d82", "clothing", datetime.datetime.now().weekday())
             if value == None: value = 0
-            msg = "For {}, you should spend ${}.".format('clothing', value)
+            msg = "For {}, you should spend ${:,.2f}.".format('clothing', value)
         else:
             msg = "Sorry, nothing was available for " + request.form['category'] + ". Try again."
 
     return render_template("index.html", checkingTotal = "${:,.2f}".format(getCheckingBalance(customerID)),
     totalBalance = "${:,.2f}".format(getTotalBalance(customerID)),
-    targetToday = "${:,.2f}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday())),
+    targetToday = "${:,.2f}".format(calculateSuggestedToday(customerID, datetime.datetime.now().weekday()) or 0),
     suggestion = msg)
 
 @application.route('/login', methods=["GET", 'POST'])
@@ -112,14 +111,12 @@ def allocations():
         addAllocation(customerID, request.form["category"], request.form["amount"], request.form["date"])
     updateAllocations(customerID)
     data = getAllocations(customerID)
-    print(str(data))
     l = []
     total = 0
     for dat in data:
         l.append({"cat": dat[0], "amount": "${:,.2f}".format(dat[1]), "date": dat[3]})
         total += dat[1]
     l = sorted(l, key=lambda k: datetime.datetime.strftime(k['date'],"%Y-%m-%d"), reverse=True)
-    print(l)
     return render_template("allocations.html", allocations=l, total="${:,.2f}".format(total))
 
 if __name__ == "__main__":
