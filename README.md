@@ -9,7 +9,7 @@ https://docs.google.com/document/d/19srp9269Dl6eKLvKOAVfFVOMmxT6mQGQ19KW5ihy8xs/
 ## Background
 At the Capital 1 Software Engineering Summit hackathon, our team created a service to help college students better manage their budget. Our service allows students to check their balance in different accounts, allocate funds towards future activies like buying textbooks, and get a suggested spending amount for common categories like groceries and gas using past transactions while accounting for committed allocations.
 
-![alt text](https://github.com/gzgracez/PersonalBudgetAdvisor/assets/architecture.png "Architecture")
+![alt text](https://github.com/gzgracez/PersonalBudgetAdvisor/blob/master/assets/architecture.png?raw=true "Architecture")
 
 ## Implemtation
 
